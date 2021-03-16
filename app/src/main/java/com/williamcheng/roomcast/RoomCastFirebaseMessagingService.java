@@ -1,11 +1,14 @@
 package com.williamcheng.roomcast;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -16,26 +19,34 @@ public class RoomCastFirebaseMessagingService  extends FirebaseMessagingService 
     @Override
     public void onNewToken(@NonNull String s) {
         super.onNewToken(s);
-        Log.d(TAG, "Token: " + s);
+        Log.d(TAG, "New Token: " + s);
     }
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-        Log.d(TAG, "Notification "+ remoteMessage.getFrom());
 
-        if(remoteMessage.getNotification() != null) {
-           String title = remoteMessage.getNotification().getTitle();
-           String body = remoteMessage.getNotification().getBody();
+        String title = remoteMessage.getData().get("title");
+        String message = remoteMessage.getData().get("message");
 
-           Log.d(TAG,  title + ": " + body);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "HEE";
+            String description = "GGG";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("234", name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
         }
-    }
 
-    private void showNotification(String title, String body) {
-        NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification.Builder builder = new Notification.Builder(getApplicationContext())
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "234")
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle(title)
-                .setContentText(body)
+                .setContentText(message);
+
+        NotificationManager manager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.notify(0, builder.build());
     }
 }
