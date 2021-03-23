@@ -1,5 +1,5 @@
 package com.williamcheng.roomcast;
 
-public class MyResponse {
+public class MessageResponse {
     public int success;
 }

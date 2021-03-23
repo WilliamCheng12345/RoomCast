@@ -14,5 +14,5 @@ public interface HttpApi {
     )
 
     @POST("fcm/send")
-    Call<MyResponse> sendNotifcation(@Body DownstreamMessage body);
+    Call<MessageResponse> sendNotification(@Body DownstreamNotification body);
 }

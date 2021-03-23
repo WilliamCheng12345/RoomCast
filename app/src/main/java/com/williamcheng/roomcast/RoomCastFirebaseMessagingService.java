@@ -27,7 +27,9 @@ public class RoomCastFirebaseMessagingService  extends FirebaseMessagingService 
         super.onMessageReceived(remoteMessage);
 
         String title = remoteMessage.getData().get("title");
-        String message = remoteMessage.getData().get("message");
+        String body = remoteMessage.getData().get("body");
+        System.out.println(title);
+        System.out.println(body);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "HEE";
@@ -44,7 +46,7 @@ public class RoomCastFirebaseMessagingService  extends FirebaseMessagingService 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "234")
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle(title)
-                .setContentText(message);
+                .setContentText(body);
 
         NotificationManager manager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         manager.notify(0, builder.build());
