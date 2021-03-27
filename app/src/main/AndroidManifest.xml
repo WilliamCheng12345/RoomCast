@@ -11,7 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RoomCast">
-        <activity android:name=".SignUpActivity"></activity>
+        <activity android:name=".CreateRoommatesActivity"></activity>
+        <activity android:name=".RoommatesActivity" />
+        <activity android:name=".SignUpActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

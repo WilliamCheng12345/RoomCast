@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                         users.child(firebaseAuth.getCurrentUser().getUid()).setValue(user);
                     }
 
-                    startActivity(new Intent(MainActivity.this, NotificationActivity.class));
+                    startActivity(new Intent(MainActivity.this, CreateRoommatesActivity.class));
                 }
                 else {
                     try {

@@ -44,11 +44,10 @@ public class NotificationActivity extends AppCompatActivity {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot snapshot12 : snapshot.getChildren()) {
-                    receiverToken = snapshot12.getValue(User.class).getToken();
+                for(DataSnapshot data : snapshot.getChildren()) {
+                    receiverToken = data.getValue(User.class).getToken();
                 }
 
-                System.out.println(receiverToken);
                 sendNotification(title, body, receiverToken);
             }
 
