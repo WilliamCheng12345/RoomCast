@@ -7,36 +7,36 @@
     tools:context=".CreateRoommatesActivity">
 
     <Button
-        android:id="@+id/createRoommates"
+        android:id="@+id/create_roommates_createButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="283dp"
         android:text="Create"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/roommatesName"
-        app:layout_constraintTop_toBottomOf="@+id/roommatesName" />
+        app:layout_constraintStart_toStartOf="@+id/create_roommates_roommatesNameInput"
+        app:layout_constraintTop_toBottomOf="@+id/create_roommates_roommatesNameInput" />
 
     <EditText
-        android:id="@+id/roommatesName"
+        android:id="@+id/create_roommates_roommatesNameInput"
         android:layout_width="188dp"
         android:layout_height="0dp"
         android:layout_marginBottom="54dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Name"
-        app:layout_constraintBottom_toTopOf="@+id/createRoommates"
-        app:layout_constraintStart_toStartOf="@+id/textView1"
-        app:layout_constraintTop_toBottomOf="@+id/textView1" />
+        app:layout_constraintBottom_toTopOf="@+id/create_roommates_createButton"
+        app:layout_constraintStart_toStartOf="@+id/create_roommates_message"
+        app:layout_constraintTop_toBottomOf="@+id/create_roommates_message" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/create_roommates_message"
         android:layout_width="175dp"
         android:layout_height="0dp"
         android:layout_marginStart="90dp"
         android:layout_marginTop="172dp"
         android:layout_marginBottom="39dp"
         android:text="Name of the group you are creating"
-        app:layout_constraintBottom_toTopOf="@+id/roommatesName"
+        app:layout_constraintBottom_toTopOf="@+id/create_roommates_roommatesNameInput"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

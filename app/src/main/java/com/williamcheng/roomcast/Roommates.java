@@ -5,13 +5,10 @@ import java.util.List;
 public class Roommates {
     private String name;
     private String joinCode;
-    private String leaderUID;
-    private List<String> usersUID;
+    private List<String> usersUID = new ArrayList<>();
 
-    public Roommates(String name, String leaderUID) {
+    public Roommates(String name) {
         this.name = name;
-        this.leaderUID = leaderUID;
-        usersUID = new ArrayList<>();
     }
 
     public Roommates() { }
@@ -19,7 +16,7 @@ public class Roommates {
     public void generateJoinCode() {
         StringBuilder newCode = new StringBuilder();
 
-        /*Generate a random code of length 6 using 62 possible characters of
+        /*Generate a random code of length 7 using 62 possible characters of
         26 uppercase letters, 26 lowercase letters and 10 digits.*/
         for(int i = 0; i < 7; i++) {
             int randomCharacter = (int)(Math.random()*62);
@@ -52,10 +49,6 @@ public class Roommates {
         return joinCode;
     }
 
-    public String getLeaderUID() {
-        return leaderUID;
-    }
-
     public List<String> getUsersUID() {
         return usersUID;
     }
@@ -66,10 +59,6 @@ public class Roommates {
 
     public void setJoinCode(String joinCode) {
         this.joinCode = joinCode;
-    }
-
-    public void setLeaderUID(String leaderUID) {
-        this.leaderUID = leaderUID;
     }
 
     public void setUsersUID(List<String> usersUID) {

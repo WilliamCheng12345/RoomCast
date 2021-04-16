@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">RoomCast</string>
+
+    <string-array name="interval">
+        <item>Once</item>
+        <item>Half an hour</item>
+    </string-array>
 </resources>

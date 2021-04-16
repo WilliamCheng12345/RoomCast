@@ -1,9 +1,12 @@
 package com.williamcheng.roomcast;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 
@@ -13,13 +16,13 @@ import androidx.core.app.NotificationCompat;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.Random;
+
 public class RoomCastFirebaseMessagingService  extends FirebaseMessagingService {
-    private static final String TAG = RoomCastFirebaseMessagingService.class.getSimpleName();
 
     @Override
     public void onNewToken(@NonNull String s) {
         super.onNewToken(s);
-        Log.d(TAG, "New Token: " + s);
     }
 
     @Override
@@ -28,27 +31,40 @@ public class RoomCastFirebaseMessagingService  extends FirebaseMessagingService 
 
         String title = remoteMessage.getData().get("title");
         String body = remoteMessage.getData().get("body");
-        System.out.println(title);
-        System.out.println(body);
+        int interval = Integer.parseInt(remoteMessage.getData().get("interval"));
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "HEE";
-            String description = "GGG";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel("234", name, importance);
-            channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
+        Intent currIntent = new Intent(getApplicationContext(), NotificationBroadcastReceiver.class);
+
+        currIntent.putExtra("Title", title);
+        currIntent.putExtra("Body", body);
+
+        System.out.println("Message received");
+
+        long currTime = System.currentTimeMillis();
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        int id = (int) currTime;
+        PendingIntent currPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), id, currIntent,0);
+
+        switch(interval) {
+            case Interval.ONCE:
+                createRepeatingAlarm(alarmManager, currTime, 10*1000, currPendingIntent);
+                break;
+            case Interval.HALF_HOUR:
+                createRepeatingAlarm(alarmManager, currTime, AlarmManager.INTERVAL_HALF_HOUR, currPendingIntent);
+                break;
+            case Interval.HOURLY:
+                createRepeatingAlarm(alarmManager, currTime, AlarmManager.INTERVAL_HOUR, currPendingIntent);
+                break;
+            case  Interval.DAILY:
+                createRepeatingAlarm(alarmManager, currTime, AlarmManager.INTERVAL_DAY, currPendingIntent);
+                break;
+            case Interval.WEEKLY:
+                createRepeatingAlarm(alarmManager, currTime, AlarmManager.INTERVAL_DAY*7, currPendingIntent);
+                break;
         }
+    }
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "234")
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentTitle(title)
-                .setContentText(body);
-
-        NotificationManager manager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.notify(0, builder.build());
+    private void createRepeatingAlarm(AlarmManager alarmManager, long currTime, long interval, PendingIntent currPendingIntent) {
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, currTime, interval, currPendingIntent);
     }
 }

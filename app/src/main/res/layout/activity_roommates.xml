@@ -7,26 +7,42 @@
     tools:context=".RoommatesActivity">
 
     <Button
-        android:id="@+id/leave"
+        android:id="@+id/roommates_leaveButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="13dp"
         android:text="Leave"
-        tools:layout_editor_absoluteX="161dp"
-        tools:layout_editor_absoluteY="419dp" />
+        app:layout_constraintBottom_toTopOf="@+id/roommates_sendNotificationButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/joinCode"
+        android:id="@+id/roommates_joinCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:layout_marginBottom="37dp"
         android:text="TextView"
-        tools:layout_editor_absoluteX="167dp"
-        tools:layout_editor_absoluteY="206dp" />
+        app:layout_constraintBottom_toTopOf="@+id/roommates_leaveButton"
+        app:layout_constraintStart_toStartOf="@+id/roommates_leaveButton" />
 
     <Button
-        android:id="@+id/sendNotification"
+        android:id="@+id/roommates_sendNotificationButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="31dp"
         android:text="Send Notification"
-        tools:layout_editor_absoluteX="114dp"
-        tools:layout_editor_absoluteY="315dp" />
+        app:layout_constraintBottom_toTopOf="@+id/roommates_savedNotificationButton"
+        app:layout_constraintEnd_toEndOf="@+id/roommates_savedNotificationButton" />
+
+    <Button
+        android:id="@+id/roommates_savedNotificationButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="289dp"
+        android:text="Saved Notification"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,40 +7,38 @@
     tools:context=".NotificationActivity">
 
     <EditText
-        android:id="@+id/messageTitle"
+        android:id="@+id/notification_messageTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="228dp"
+        android:layout_marginTop="139dp"
         android:ems="10"
         android:hint="Title"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/messageBody"
+        android:id="@+id/notification_messageBody"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="148dp"
+        android:layout_marginTop="59dp"
         android:ems="10"
         android:hint="Body"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/messageTitle" />
+        app:layout_constraintStart_toStartOf="@+id/notification_messageTitle"
+        app:layout_constraintTop_toBottomOf="@+id/notification_messageTitle" />
 
     <Button
-        android:id="@+id/send"
+        android:id="@+id/notification_sendButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="49dp"
-        android:onClick="send"
+        android:layout_marginBottom="208dp"
         android:text="Send"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/messageBody" />
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
