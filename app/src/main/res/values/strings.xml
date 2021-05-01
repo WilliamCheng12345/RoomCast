@@ -3,6 +3,10 @@
 
     <string-array name="interval">
         <item>Once</item>
-        <item>Half an hour</item>
+        <item>Hourly</item>
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>Start of Month</item>
+        <item>End of Month</item>
     </string-array>
 </resources>

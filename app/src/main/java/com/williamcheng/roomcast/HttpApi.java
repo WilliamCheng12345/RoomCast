@@ -1,5 +1,8 @@
 package com.williamcheng.roomcast;
 
+import com.williamcheng.roomcast.classes.DownstreamHttpMessage;
+import com.williamcheng.roomcast.classes.DownstreamMessageResponse;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Headers;
@@ -14,5 +17,5 @@ public interface HttpApi {
     )
 
     @POST("fcm/send")
-    Call<MessageResponse> sendNotification(@Body DownstreamNotification body);
+    Call<DownstreamMessageResponse> sendNotification(@Body DownstreamHttpMessage body);
 }

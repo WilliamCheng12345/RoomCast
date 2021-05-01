@@ -1,25 +1,28 @@
 package com.williamcheng.roomcast;
 
 import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.NotificationCompat;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.williamcheng.roomcast.classes.AlarmBuilder;
+import com.williamcheng.roomcast.classes.Interval;
+import com.williamcheng.roomcast.classes.Message;
+import com.williamcheng.roomcast.classes.SavedNotification;
+import com.williamcheng.roomcast.classes.User;
 
-import java.util.Random;
+import java.util.List;
 
 public class RoomCastFirebaseMessagingService  extends FirebaseMessagingService {
-
     @Override
     public void onNewToken(@NonNull String s) {
         super.onNewToken(s);
@@ -29,42 +32,30 @@ public class RoomCastFirebaseMessagingService  extends FirebaseMessagingService 
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
+        final AlarmBuilder alarmBuilder = new AlarmBuilder(this);
         String title = remoteMessage.getData().get("title");
         String body = remoteMessage.getData().get("body");
-        int interval = Integer.parseInt(remoteMessage.getData().get("interval"));
-
-        Intent currIntent = new Intent(getApplicationContext(), NotificationBroadcastReceiver.class);
-
-        currIntent.putExtra("Title", title);
-        currIntent.putExtra("Body", body);
-
-        System.out.println("Message received");
-
+        long interval = Long.parseLong(remoteMessage.getData().get("interval"));
         long currTime = System.currentTimeMillis();
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        int id = (int) currTime;
-        PendingIntent currPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), id, currIntent,0);
+        final int id = (Long.toString(currTime)).hashCode();
+        DatabaseReference rootUsers = FirebaseDatabase.getInstance().getReference("Users");
+        String currUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        switch(interval) {
-            case Interval.ONCE:
-                createRepeatingAlarm(alarmManager, currTime, 10*1000, currPendingIntent);
-                break;
-            case Interval.HALF_HOUR:
-                createRepeatingAlarm(alarmManager, currTime, AlarmManager.INTERVAL_HALF_HOUR, currPendingIntent);
-                break;
-            case Interval.HOURLY:
-                createRepeatingAlarm(alarmManager, currTime, AlarmManager.INTERVAL_HOUR, currPendingIntent);
-                break;
-            case  Interval.DAILY:
-                createRepeatingAlarm(alarmManager, currTime, AlarmManager.INTERVAL_DAY, currPendingIntent);
-                break;
-            case Interval.WEEKLY:
-                createRepeatingAlarm(alarmManager, currTime, AlarmManager.INTERVAL_DAY*7, currPendingIntent);
-                break;
-        }
-    }
+        rootUsers.child(currUserID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                User currUser = task.getResult().getValue(User.class);
+                Message message = new Message(title, body, interval);
+                SavedNotification savedNotification = new SavedNotification(message, id, currTime);
 
-    private void createRepeatingAlarm(AlarmManager alarmManager, long currTime, long interval, PendingIntent currPendingIntent) {
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, currTime, interval, currPendingIntent);
+                if(interval != Interval.ONCE) {
+                    currUser.getSavedNotifications().add(savedNotification);
+                    rootUsers.child(currUserID).child("savedNotifications").setValue(currUser.getSavedNotifications());
+                }
+
+                alarmBuilder.build(currTime, savedNotification);
+            }
+        });
+
     }
 }

@@ -1,10 +1,10 @@
-package com.williamcheng.roomcast;
+package com.williamcheng.roomcast.classes;
 
 import android.content.Context;
 import android.widget.Toast;
 
 public class ToastBuilder {
-    Context context;
+    private final Context context;
 
     public ToastBuilder(Context context) {
         this.context = context;

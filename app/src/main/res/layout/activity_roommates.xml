@@ -4,34 +4,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RoommatesActivity">
+    tools:context=".activities.RoommatesActivity">
 
     <Button
         android:id="@+id/roommates_leaveButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="13dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginBottom="27dp"
         android:text="Leave"
         app:layout_constraintBottom_toTopOf="@+id/roommates_sendNotificationButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="@+id/roommates_logOutButton" />
 
     <TextView
         android:id="@+id/roommates_joinCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="14dp"
-        android:layout_marginBottom="37dp"
+        android:layout_marginStart="17dp"
+        android:layout_marginBottom="95dp"
         android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/roommates_leaveButton"
-        app:layout_constraintStart_toStartOf="@+id/roommates_leaveButton" />
+        app:layout_constraintBottom_toTopOf="@+id/roommates_logOutButton"
+        app:layout_constraintStart_toStartOf="@+id/roommates_logOutButton" />
 
     <Button
         android:id="@+id/roommates_sendNotificationButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
-        android:layout_marginBottom="31dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="17dp"
         android:text="Send Notification"
         app:layout_constraintBottom_toTopOf="@+id/roommates_savedNotificationButton"
         app:layout_constraintEnd_toEndOf="@+id/roommates_savedNotificationButton" />
@@ -40,9 +40,19 @@
         android:id="@+id/roommates_savedNotificationButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="289dp"
+        android:layout_marginBottom="157dp"
         android:text="Saved Notification"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/roommates_logOutButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="41dp"
+        android:layout_marginBottom="29dp"
+        android:text="Log out"
+        app:layout_constraintBottom_toTopOf="@+id/roommates_leaveButton"
+        app:layout_constraintEnd_toEndOf="@+id/roommates_sendNotificationButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>

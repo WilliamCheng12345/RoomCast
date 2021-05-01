@@ -1,4 +1,4 @@
-package com.williamcheng.roomcast;
+package com.williamcheng.roomcast.classes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,13 +7,12 @@ public class User {
     private String email;
     private String token;
     private String roommatesName;
-    private List<SavedNotification> savedNotifications;
+    private List<SavedNotification> savedNotifications = new ArrayList<>();;
 
     public User(String email, String token) {
         this.email = email;
         this.token = token;
         roommatesName = "EMPTY";
-        savedNotifications = new ArrayList<>();
     }
 
     public User() { }

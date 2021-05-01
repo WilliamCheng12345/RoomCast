@@ -11,20 +11,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RoomCast">
-        <activity android:name=".SavedNotificationActivity"></activity>
-        <activity android:name=".JoinRoommatesActivity" />
-        <activity android:name=".NoRoommatesActivity" />
-        <activity android:name=".CreateRoommatesActivity" />
-        <activity android:name=".RoommatesActivity" />
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".activities.SavedNotificationActivity"></activity>
+        <activity android:name=".activities.JoinRoommatesActivity" />
+        <activity android:name=".activities.NoRoommatesActivity" />
+        <activity android:name=".activities.CreateRoommatesActivity" />
+        <activity android:name=".activities.RoommatesActivity" />
+        <activity android:name=".activities.SignUpActivity" />
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".NotificationActivity" />
+        <activity android:name=".activities.NotificationActivity" />
 
         <service android:name=".RoomCastFirebaseMessagingService">
             <intent-filter>

@@ -1,41 +1,44 @@
-package com.williamcheng.roomcast;
+package com.williamcheng.roomcast.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlarmManager;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.messaging.FirebaseMessaging;
-
-import java.util.Calendar;
+import com.williamcheng.roomcast.Client;
+import com.williamcheng.roomcast.classes.DownstreamHttpMessage;
+import com.williamcheng.roomcast.classes.DownstreamMessageResponse;
+import com.williamcheng.roomcast.HttpApi;
+import com.williamcheng.roomcast.classes.Interval;
+import com.williamcheng.roomcast.classes.Message;
+import com.williamcheng.roomcast.R;
+import com.williamcheng.roomcast.classes.Roommates;
+import com.williamcheng.roomcast.classes.User;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class NotificationActivity extends AppCompatActivity {
+public class NotificationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private HttpApi httpService;
-    private EditText messageTitle;
-    private EditText messageBody;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +46,15 @@ public class NotificationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_notification);
 
         Button sendButton = findViewById(R.id.notification_sendButton);
-        messageTitle = findViewById(R.id.notification_messageTitle);
-        messageBody = findViewById(R.id.notification_messageBody);
+
+        EditText messageBody = findViewById(R.id.notification_messageBody);
+        EditText messageTitle = findViewById(R.id.notification_messageTitle);
+        Spinner intervalSpinner = findViewById(R.id.notification_intervalSpinner);
+
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.interval, android.R.layout.simple_spinner_item);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        intervalSpinner.setAdapter(spinnerAdapter);
+        intervalSpinner.setOnItemSelectedListener(this);
 
         httpService = Client.getClient("https://fcm.googleapis.com/").create(HttpApi.class);
 
@@ -53,7 +63,10 @@ public class NotificationActivity extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                send();
+                String selectedItem = intervalSpinner.getSelectedItem().toString();
+                long interval = convertSelectedToInterval(selectedItem);
+
+                send(messageTitle.getText().toString(), messageBody.getText().toString(), interval);
             }
         });
     }
@@ -72,9 +85,26 @@ public class NotificationActivity extends AppCompatActivity {
         }
     }
 
-    private void send() {
-        String title = messageTitle.getText().toString();
-        String body = messageBody.getText().toString();
+    private long convertSelectedToInterval(String selectedItem) {
+        switch (selectedItem) {
+            case "Once":
+                return Interval.ONCE;
+            case "Hourly":
+                return Interval.HOURLY;
+            case "Daily":
+                return Interval.DAILY;
+            case "Weekly":
+                return Interval.WEEKLY;
+            case "Start of Month":
+                return Interval.MONTHLY_START;
+            case "End of Month":
+                return Interval.MONTHLY_END;
+        }
+
+        return Interval.ONCE;
+    }
+
+    private void send(String title, String body, long interval) {
         String currUserUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference root = FirebaseDatabase.getInstance().getReference();
 
@@ -87,6 +117,7 @@ public class NotificationActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<DataSnapshot> task) {
                         Roommates currRoommates = task.getResult().getValue(Roommates.class);
+                        Toast.makeText(NotificationActivity.this, Long.toString(interval), Toast.LENGTH_SHORT).show();
 
                         for(String receiverUID : currRoommates.getUsersUID()) {
                             root.child("Users").child(receiverUID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -94,7 +125,7 @@ public class NotificationActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<DataSnapshot> task) {
                                     User receiver = task.getResult().getValue(User.class);
 
-                                    sendNotification(title, body, receiver.getToken());
+                                    sendNotification(title, body, interval, receiver.getToken());
                                 }
                             });
                         }
@@ -104,13 +135,13 @@ public class NotificationActivity extends AppCompatActivity {
         });
     }
 
-    public void sendNotification(String title, String body, String receiverToken) {
-        Message message = new Message(title, body, Interval.ONCE);
-        DownstreamNotification notification = new DownstreamNotification(receiverToken, message);
+    private void sendNotification(String title, String body, long interval,  String receiverToken) {
+        Message message = new Message(title, body, interval);
+        DownstreamHttpMessage notification = new DownstreamHttpMessage(receiverToken, message);
 
-        httpService.sendNotification(notification).enqueue(new Callback<MessageResponse>() {
+        httpService.sendNotification(notification).enqueue(new Callback<DownstreamMessageResponse>() {
             @Override
-            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
+            public void onResponse(Call<DownstreamMessageResponse> call, Response<DownstreamMessageResponse> response) {
                 if(response.code() == 200) {
                     if(response.body().success != 1) {
                         Toast.makeText(NotificationActivity.this, "Failed to send", Toast.LENGTH_SHORT).show();
@@ -119,9 +150,19 @@ public class NotificationActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<MessageResponse> call, Throwable t) {
+            public void onFailure(Call<DownstreamMessageResponse> call, Throwable t) {
 
             }
         });
+    }
+
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

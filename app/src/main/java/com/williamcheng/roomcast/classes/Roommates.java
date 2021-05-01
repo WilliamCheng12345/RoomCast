@@ -1,4 +1,4 @@
-package com.williamcheng.roomcast;
+package com.williamcheng.roomcast.classes;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +9,7 @@ public class Roommates {
 
     public Roommates(String name) {
         this.name = name;
+        generateJoinCode();
     }
 
     public Roommates() { }

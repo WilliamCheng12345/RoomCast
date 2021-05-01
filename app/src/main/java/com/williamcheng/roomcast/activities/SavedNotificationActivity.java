@@ -1,8 +1,10 @@
-package com.williamcheng.roomcast;
+package com.williamcheng.roomcast.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.williamcheng.roomcast.R;
 
 public class SavedNotificationActivity extends AppCompatActivity {
 
