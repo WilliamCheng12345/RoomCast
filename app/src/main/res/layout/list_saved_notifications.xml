@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardElevation="8dp"
+    app:cardCornerRadius="8dp"
+    android:layout_margin="16dp">
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="16dp">
+
+
+        <TextView
+            android:id="@+id/list_saved_notification_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="EMPTY"
+            android:textSize="20sp"
+            />
+
+        <TextView
+            android:id="@+id/list_saved_notification_body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="EMPTY"
+            android:textSize="20sp"
+            />
+
+        <TextView
+            android:id="@+id/list_saved_notification_triggerTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="EMPTY"
+            android:textSize="20sp"
+            />
+
+        <TextView
+            android:id="@+id/list_saved_notification_interval"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="EMPTY"
+            android:textSize="20sp"
+            />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

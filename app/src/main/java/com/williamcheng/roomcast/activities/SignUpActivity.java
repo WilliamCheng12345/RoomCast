@@ -36,6 +36,7 @@ public class SignUpActivity extends AppCompatActivity {
         Button signUpButton = findViewById(R.id.sign_up_signUpButton);
         EditText emailInput = findViewById(R.id.sign_up_emailInput);
         EditText passwordInput = findViewById(R.id.sign_up_passwordInput);
+        EditText confirmPasswordInput = findViewById(R.id.sign_up_confirmPasswordInput);
 
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
             @Override
@@ -47,14 +48,19 @@ public class SignUpActivity extends AppCompatActivity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signUp(emailInput.getText().toString(), passwordInput.getText().toString());
+                signUp(emailInput.getText().toString(), passwordInput.getText().toString(), confirmPasswordInput.getText().toString());
             }
         });
     }
 
-    public void signUp(String email, String password) {
-        if(email.equals("") || password.equals("")) {
+    public void signUp(String email, String password, String confirmedPassword) {
+        if(email.equals("") || password.equals("") || confirmedPassword.equals("")) {
             toastBuilder.createToast("Email or password cannot be empty");
+            return;
+        }
+
+        if(!confirmedPassword.equals(password)) {
+            toastBuilder.createToast("Passwords do not match");
             return;
         }
 
@@ -66,9 +72,9 @@ public class SignUpActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()) {
                     User newUser = new User(email, deviceToken);
-                    String newUserUID = firebaseAuth.getCurrentUser().getUid();
+                    String newUserId = firebaseAuth.getCurrentUser().getUid();
 
-                    rootUsers.child(newUserUID).setValue(newUser);
+                    rootUsers.child(newUserId).setValue(newUser);
                     firebaseAuth.signOut();
                     startActivity(new Intent(SignUpActivity.this, MainActivity.class));
                 }
@@ -93,7 +99,7 @@ public class SignUpActivity extends AppCompatActivity {
             toastBuilder.createToast("Account already exists");
         }
         catch (Exception e) {
-            Log.e("SignUpActivity Error: ", e.getMessage());
+            toastBuilder.createToast(e.getMessage());
         }
     }
 }

@@ -2,8 +2,7 @@ package com.williamcheng.roomcast.classes;
 
 
 public class Message {
-    private String title;
-    private String body;
+    private String title, body;
     private long interval;
 
     public Message(String title, String body, long interval) {

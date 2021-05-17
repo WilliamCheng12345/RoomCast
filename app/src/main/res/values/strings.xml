@@ -9,4 +9,20 @@
         <item>Start of Month</item>
         <item>End of Month</item>
     </string-array>
+
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="RoomCast">RoomCast</string>
+    <string name="new_user">New user?</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="saved_notifications">Saved Notifications</string>
+    <string name="log_out">Log Out</string>
+    <string name="leave">Leave Group</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="log_in">Log In</string>
+
 </resources>

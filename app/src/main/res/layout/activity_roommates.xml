@@ -1,58 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/roommates"
     tools:context=".activities.RoommatesActivity">
 
-    <Button
-        android:id="@+id/roommates_leaveButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="3dp"
-        android:layout_marginBottom="27dp"
-        android:text="Leave"
-        app:layout_constraintBottom_toTopOf="@+id/roommates_sendNotificationButton"
-        app:layout_constraintStart_toStartOf="@+id/roommates_logOutButton" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/roommates_joinCode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="17dp"
-        android:layout_marginBottom="95dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/roommates_logOutButton"
-        app:layout_constraintStart_toStartOf="@+id/roommates_logOutButton" />
+        <EditText
+            android:id="@+id/roommates_messageTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="194dp"
+            android:ems="10"
+            android:hint="Title"
+            android:inputType="textPersonName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/roommates_sendNotificationButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="17dp"
-        android:text="Send Notification"
-        app:layout_constraintBottom_toTopOf="@+id/roommates_savedNotificationButton"
-        app:layout_constraintEnd_toEndOf="@+id/roommates_savedNotificationButton" />
+        <EditText
+            android:id="@+id/roommates_messageBody"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="47dp"
+            android:ems="10"
+            android:hint="Body"
+            android:inputType="textPersonName"
+            app:layout_constraintStart_toStartOf="@+id/roommates_messageTitle"
+            app:layout_constraintTop_toBottomOf="@+id/roommates_messageTitle" />
 
-    <Button
-        android:id="@+id/roommates_savedNotificationButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="157dp"
-        android:text="Saved Notification"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <Button
+            android:id="@+id/roommates_sendButton"
+            android:layout_width="202dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="48dp"
+            android:text="Send"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/roommates_intervalSpinner" />
 
-    <Button
-        android:id="@+id/roommates_logOutButton"
+        <Spinner
+            android:id="@+id/roommates_intervalSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            app:layout_constraintEnd_toEndOf="@+id/roommates_messageBody"
+            app:layout_constraintStart_toStartOf="@+id/roommates_messageBody"
+            app:layout_constraintTop_toBottomOf="@+id/roommates_messageBody" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/roommates_navigationView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="41dp"
-        android:layout_marginBottom="29dp"
-        android:text="Log out"
-        app:layout_constraintBottom_toTopOf="@+id/roommates_leaveButton"
-        app:layout_constraintEnd_toEndOf="@+id/roommates_sendNotificationButton" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="match_parent"
+        app:headerLayout="@layout/header_roommates"
+        app:menu="@menu/menu_roommates"
+        android:layout_gravity="left" />
+</androidx.drawerlayout.widget.DrawerLayout>

@@ -2,13 +2,12 @@ package com.williamcheng.roomcast.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
+import android.widget.TextView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -21,12 +20,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.williamcheng.roomcast.R;
 import com.williamcheng.roomcast.classes.AlarmBuilder;
-import com.williamcheng.roomcast.classes.Interval;
-import com.williamcheng.roomcast.classes.SavedNotification;
 import com.williamcheng.roomcast.classes.ToastBuilder;
+import com.williamcheng.roomcast.classes.UpcomingNotification;
 import com.williamcheng.roomcast.classes.User;
-
-
 
 public class MainActivity extends AppCompatActivity {
      private final ToastBuilder toastBuilder = new ToastBuilder(this);
@@ -44,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Button loginButton = findViewById(R.id.main_loginButton);
-        Button signUpButton = findViewById(R.id.main_signUpButton);
+        TextView signUpText = findViewById(R.id.main_signUpText);
         EditText emailInput = findViewById(R.id.main_emailInput);
         EditText passwordInput = findViewById(R.id.main_passwordInput);
 
@@ -62,13 +58,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        signUpButton.setOnClickListener(new View.OnClickListener() {
+        signUpText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 signUp();
             }
         });
     }
+
 
     private void login(String email, String password) {
         if(email.equals("") || password.equals("")) {
@@ -90,24 +87,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void moveToNextActivity() {
-        String currUserUID = firebaseAuth.getCurrentUser().getUid();
+        String currUserId = firebaseAuth.getCurrentUser().getUid();
         DatabaseReference rootUsers = FirebaseDatabase.getInstance().getReference("Users");
 
-        rootUsers.child(currUserUID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        rootUsers.child(currUserId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
-                User currUser = task.getResult().getValue(User.class);
+                User user = task.getResult().getValue(User.class);
 
                 /* If user signs into his account on a different device, we need to get the new
-                 * registration token in order for user to receive notifications */
-                rootUsers.child(currUserUID).child("token").setValue(deviceToken);
+                 * registration token for that device in order for user to receive notifications */
+                rootUsers.child(currUserId).child("token").setValue(deviceToken);
 
-                if(currUser.getRoommatesName().equals("EMPTY")) {
+                if(user.getRoommatesName().equals("EMPTY")) {
                     startActivity(new Intent(MainActivity.this, NoRoommatesActivity.class));
                 }
                 else {
-                    for(SavedNotification savedNotification : currUser.getSavedNotifications()) {
-                        restartAlarm(savedNotification);
+                    for(UpcomingNotification upcomingNotification : user.getUpcomingNotifications()) {
+                        restartAlarm(upcomingNotification);
                     }
 
                     startActivity(new Intent(MainActivity.this, RoommatesActivity.class));
@@ -118,23 +115,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /*Alarms on the phone will be removed when user logs out or the phone powers off.
+    /* Alarms on the phone will be removed when user logs out or the phone powers off.
      * Therefore it is needed to restart these alarms when the user logs back on.*/
-    private void restartAlarm(SavedNotification savedNotification) {
+    private void restartAlarm(UpcomingNotification upcomingNotification) {
         final AlarmBuilder alarmBuilder = new AlarmBuilder(this);
-        long interval = savedNotification.getMessage().getInterval();
-        long triggerTime;
 
-        if(interval == Interval.MONTHLY_START || interval == Interval.MONTHLY_END) {
-            triggerTime = savedNotification.getTimeStamp();
-        }
-        else {
-            long oldTime = savedNotification.getTimeStamp();
-            long currTime = System.currentTimeMillis();
-            triggerTime = (long) Math.ceil((double) (currTime - oldTime)/interval);
-        }
-
-        alarmBuilder.build(triggerTime, savedNotification);
+        alarmBuilder.build(upcomingNotification.getTriggerTime(), upcomingNotification);
     }
 
     private void displayLoginError(Task<AuthResult> task) {

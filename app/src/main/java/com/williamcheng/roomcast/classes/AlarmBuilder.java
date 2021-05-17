@@ -16,19 +16,19 @@ public class AlarmBuilder {
         alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     }
 
-    public void build(long triggerTime, SavedNotification savedNotification) {
+    public void build(long triggerTime, UpcomingNotification upcomingNotification) {
         Intent currIntent = new Intent(context.getApplicationContext(), NotificationBroadcastReceiver.class);
-        Message message = savedNotification.getMessage();
+        Message message = upcomingNotification.getMessage();
         long interval = message.getInterval();
-        int id = savedNotification.getId();
+        int id = upcomingNotification.getId();
 
         currIntent.putExtra("Title", message.getTitle());
         currIntent.putExtra("Body", message.getBody());
         currIntent.putExtra("Interval", interval);
         currIntent.putExtra("Id", id);
-        currIntent.putExtra("Time", savedNotification.getTimeStamp());
+        currIntent.putExtra("Time", upcomingNotification.getTriggerTime());
 
-        PendingIntent currPendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), savedNotification.getId(), currIntent, 0);
+        PendingIntent currPendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), id, currIntent, 0);
 
         if(interval == Interval.ONCE || interval == Interval.MONTHLY_START || interval == Interval.MONTHLY_END) {
             alarmManager.set(AlarmManager.RTC_WAKEUP, triggerTime, currPendingIntent);

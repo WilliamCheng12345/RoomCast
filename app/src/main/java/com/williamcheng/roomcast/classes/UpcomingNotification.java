@@ -1,17 +1,17 @@
 package com.williamcheng.roomcast.classes;
 
-public class SavedNotification {
+public class UpcomingNotification {
     private Message message = new Message();
     private int id;
-    private long timeStamp;
+    private long triggerTime;
 
-    public SavedNotification(Message message, int id, long timeStamp) {
+    public UpcomingNotification(Message message, int id, long triggerTime) {
         this.message = message;
         this.id = id;
-        this.timeStamp = timeStamp;
+        this.triggerTime = triggerTime;
     }
 
-    public SavedNotification() {
+    public UpcomingNotification() {
 
     }
 
@@ -23,8 +23,8 @@ public class SavedNotification {
         return id;
     }
 
-    public long getTimeStamp() {
-        return timeStamp;
+    public long getTriggerTime() {
+        return triggerTime;
     }
 
     public void setId(int id) {
@@ -35,7 +35,7 @@ public class SavedNotification {
         this.message = message;
     }
 
-    public void setTimeStamp(long timeStamp) {
-        this.timeStamp = timeStamp;
+    public void setTriggerTime(long triggerTime) {
+        this.triggerTime = triggerTime;
     }
 }

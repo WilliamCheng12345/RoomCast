@@ -16,9 +16,9 @@ public class AlarmRemover {
         alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     }
 
-    public void remove(SavedNotification savedNotification) {
+    public void remove(UpcomingNotification upcomingNotification) {
         Intent currIntent = new Intent(context.getApplicationContext(), NotificationBroadcastReceiver.class);
-        PendingIntent currPendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), savedNotification.getId(), currIntent, 0);
+        PendingIntent currPendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), upcomingNotification.getId(), currIntent, 0);
         alarmManager.cancel(currPendingIntent);
     }
 

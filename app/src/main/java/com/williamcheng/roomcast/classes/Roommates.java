@@ -3,8 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Roommates {
-    private String name;
-    private String joinCode;
+    private String name, joinCode;
     private List<String> usersUID = new ArrayList<>();
 
     public Roommates(String name) {

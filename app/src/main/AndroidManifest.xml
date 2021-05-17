@@ -11,10 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RoomCast">
-        <activity android:name=".activities.SavedNotificationActivity"></activity>
-        <activity android:name=".activities.JoinRoommatesActivity" />
+        <activity android:name=".activities.UpcomingNotificationActivity"></activity>
         <activity android:name=".activities.NoRoommatesActivity" />
-        <activity android:name=".activities.CreateRoommatesActivity" />
         <activity android:name=".activities.RoommatesActivity" />
         <activity android:name=".activities.SignUpActivity" />
         <activity android:name=".activities.MainActivity">
@@ -24,7 +22,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.NotificationActivity" />
 
         <service android:name=".RoomCastFirebaseMessagingService">
             <intent-filter>
@@ -40,6 +37,9 @@
                 <action android:name="android.intent.action.INPUT_METHOD_CHANGED" />
             </intent-filter>
         </receiver>
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

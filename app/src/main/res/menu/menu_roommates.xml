@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_roommates_leave"
+        android:title="@string/leave"
+        android:checked="true"
+        android:icon="@drawable/ic_baseline_person_remove_24"
+        />
+
+    <item
+        android:id="@+id/menu_roommates_savedNotifications"
+        android:title="@string/saved_notifications"
+        android:checked="true"
+        android:icon="@drawable/ic_baseline_notifications_24"
+        />
+
+    <item
+        android:id="@+id/menu_roommates_logOut"
+        android:title="@string/log_out"
+        android:checked="true"
+        android:icon="@drawable/ic_baseline_exit_to_app_24"
+        />
+</menu>

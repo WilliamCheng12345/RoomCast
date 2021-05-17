@@ -4,6 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.SavedNotificationActivity">
+    tools:context=".activities.UpcomingNotificationActivity"
+   >
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/saved_notification_recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="114dp"
+        tools:layout_editor_absoluteY="71dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

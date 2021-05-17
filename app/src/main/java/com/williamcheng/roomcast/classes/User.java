@@ -7,7 +7,7 @@ public class User {
     private String email;
     private String token;
     private String roommatesName;
-    private List<SavedNotification> savedNotifications = new ArrayList<>();;
+    private List<UpcomingNotification> upcomingNotifications = new ArrayList<>();
 
     public User(String email, String token) {
         this.email = email;
@@ -41,11 +41,11 @@ public class User {
         this.roommatesName = roommatesName;
     }
 
-    public List<SavedNotification> getSavedNotifications() {
-        return savedNotifications;
+    public List<UpcomingNotification> getUpcomingNotifications() {
+        return upcomingNotifications;
     }
 
-    public void setSavedNotifications(List<SavedNotification> savedNotifications) {
-        this.savedNotifications = savedNotifications;
+    public void setUpcomingNotifications(List<UpcomingNotification> upcomingNotifications) {
+        this.upcomingNotifications = upcomingNotifications;
     }
 }
