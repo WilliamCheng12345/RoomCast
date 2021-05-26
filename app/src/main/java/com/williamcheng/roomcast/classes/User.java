@@ -5,13 +5,13 @@ import java.util.List;
 
 public class User {
     private String email;
-    private String token;
+    private String deviceToken;
     private String roommatesName;
     private List<UpcomingNotification> upcomingNotifications = new ArrayList<>();
 
-    public User(String email, String token) {
+    public User(String email, String deviceToken) {
         this.email = email;
-        this.token = token;
+        this.deviceToken = deviceToken;
         roommatesName = "EMPTY";
     }
 
@@ -21,28 +21,28 @@ public class User {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
+    public String getDeviceToken() {
+        return deviceToken;
     }
 
     public String getRoommatesName() {
         return roommatesName;
     }
 
-    public void setRoommatesName(String roommatesName) {
-        this.roommatesName = roommatesName;
-    }
-
     public List<UpcomingNotification> getUpcomingNotifications() {
         return upcomingNotifications;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setDeviceToken(String deviceToken) {
+        this.deviceToken = deviceToken;
+    }
+
+    public void setRoommatesName(String roommatesName) {
+        this.roommatesName = roommatesName;
     }
 
     public void setUpcomingNotifications(List<UpcomingNotification> upcomingNotifications) {

@@ -4,6 +4,7 @@ public class UpcomingNotification {
     private Message message = new Message();
     private int id;
     private long triggerTime;
+    private boolean isSelected;
 
     public UpcomingNotification(Message message, int id, long triggerTime) {
         this.message = message;
@@ -27,6 +28,10 @@ public class UpcomingNotification {
         return triggerTime;
     }
 
+    public boolean isSelected() {
+        return isSelected;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -38,4 +43,9 @@ public class UpcomingNotification {
     public void setTriggerTime(long triggerTime) {
         this.triggerTime = triggerTime;
     }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
 }

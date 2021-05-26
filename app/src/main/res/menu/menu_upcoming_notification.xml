@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/menu_roommates_leave"
+        android:id="@+id/menu_upcoming_notification_leave"
         android:title="@string/leave"
         android:checked="true"
         android:icon="@drawable/ic_baseline_person_remove_24"
         />
 
     <item
-        android:id="@+id/menu_roommates_upcomingNotifications"
-        android:title="@string/upcoming_notifications"
+        android:id="@+id/menu_upcoming_notification_sendNotifications"
+        android:title="@string/send_notification"
         android:checked="true"
-        android:icon="@drawable/ic_baseline_notifications_24"
+        android:icon="@drawable/ic_baseline_notification_add_24"
         />
 
     <item
-        android:id="@+id/menu_roommates_logOut"
+        android:id="@+id/menu_upcoming_notification_logOut"
         android:title="@string/log_out"
         android:checked="true"
         android:icon="@drawable/ic_baseline_exit_to_app_24"

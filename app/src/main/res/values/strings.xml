@@ -13,16 +13,32 @@
     <string name="open">Open</string>
     <string name="close">Close</string>
 
+    <string name="RoomCast">RoomCast</string>
+
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="confirm_password">Confirm password</string>
-    <string name="RoomCast">RoomCast</string>
     <string name="new_user">New user?</string>
     <string name="forgot_password">Forgot Password?</string>
-    <string name="saved_notifications">Saved Notifications</string>
-    <string name="log_out">Log Out</string>
-    <string name="leave">Leave Group</string>
+    <string name="confirm_password">Confirm password</string>
     <string name="sign_up">Sign Up</string>
     <string name="log_in">Log In</string>
 
+    <string name="no_roommates_message">You are currently not with any roommates. Create a new group or join an existing one with a code.</string>
+
+
+    <string name="log_out">Log Out</string>
+
+    <string name="leave">Leave Group</string>
+    <string name="upcoming_notifications">Upcoming Notifications</string>
+    <string name="title">Title</string>
+    <string name="body">Body</string>
+    <string name="send">Send</string>
+
+    <string name="join_code">Join Code</string>
+    <string name="name">Name</string>
+    <string name="empty">EMPTY</string>
+    <string name="join">Join</string>
+    <string name="create">Create</string>
+    <string name="send_notification">Send Notification</string>
+    <string name="unsubscribe">Unsubscribe</string>
 </resources>

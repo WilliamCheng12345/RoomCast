@@ -33,17 +33,26 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        Button signUpButton = findViewById(R.id.sign_up_signUpButton);
-        EditText emailInput = findViewById(R.id.sign_up_emailInput);
-        EditText passwordInput = findViewById(R.id.sign_up_passwordInput);
-        EditText confirmPasswordInput = findViewById(R.id.sign_up_confirmPasswordInput);
 
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
             @Override
             public void onComplete(@NonNull Task<String> task) {
-                deviceToken = task.getResult();
+                if(task.isSuccessful()) {
+                    deviceToken = task.getResult();
+                    setSignUpButton();
+                }
+                else {
+                    toastBuilder.createToast("Device registration token retrieval failed");
+                }
             }
         });
+    }
+
+    private void setSignUpButton () {
+        Button signUpButton = findViewById(R.id.sign_up_signUpButton);
+        EditText emailInput = findViewById(R.id.sign_up_emailInput);
+        EditText passwordInput = findViewById(R.id.sign_up_passwordInput);
+        EditText confirmPasswordInput = findViewById(R.id.sign_up_confirmPasswordInput);
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override

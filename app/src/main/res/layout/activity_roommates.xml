@@ -7,55 +7,57 @@
     android:id="@+id/roommates"
     tools:context=".activities.RoommatesActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_margin="16dp"
+        android:orientation="vertical">
 
         <EditText
             android:id="@+id/roommates_messageTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="194dp"
-            android:ems="10"
-            android:hint="Title"
-            android:inputType="textPersonName"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:background="@drawable/custom_input"
+            android:padding="6dp"
+            android:hint="@string/title"
+            android:inputType="textMultiLine" />
 
         <EditText
             android:id="@+id/roommates_messageBody"
-            android:layout_width="wrap_content"
+            android:background="@drawable/custom_input"
             android:layout_height="wrap_content"
-            android:layout_marginStart="1dp"
-            android:layout_marginTop="47dp"
-            android:ems="10"
-            android:hint="Body"
-            android:inputType="textPersonName"
-            app:layout_constraintStart_toStartOf="@+id/roommates_messageTitle"
-            app:layout_constraintTop_toBottomOf="@+id/roommates_messageTitle" />
+            android:layout_width="match_parent"
+            android:minLines="8"
+            android:padding="6dp"
+            android:layout_marginTop="8dp"
+            android:gravity="top"
+            android:hint="@string/body"
+            android:inputType="textMultiLine"
+            />
 
-        <Button
-            android:id="@+id/roommates_sendButton"
-            android:layout_width="202dp"
-            android:layout_height="36dp"
-            android:layout_marginTop="48dp"
-            android:text="Send"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/roommates_intervalSpinner" />
-
-        <Spinner
-            android:id="@+id/roommates_intervalSpinner"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="35dp"
-            app:layout_constraintEnd_toEndOf="@+id/roommates_messageBody"
-            app:layout_constraintStart_toStartOf="@+id/roommates_messageBody"
-            app:layout_constraintTop_toBottomOf="@+id/roommates_messageBody" />
+            android:layout_marginTop="8dp">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <Spinner
+                android:id="@+id/roommates_intervalSpinner"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                />
+
+            <Button
+                android:id="@+id/roommates_sendButton"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="@string/send"
+                android:textColor="@color/white"
+                android:layout_alignParentEnd="true" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/roommates_navigationView"
@@ -63,5 +65,5 @@
         android:layout_height="match_parent"
         app:headerLayout="@layout/header_roommates"
         app:menu="@menu/menu_roommates"
-        android:layout_gravity="left" />
+        android:layout_gravity="start" />
 </androidx.drawerlayout.widget.DrawerLayout>

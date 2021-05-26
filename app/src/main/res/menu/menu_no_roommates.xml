@@ -2,21 +2,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/menu_no_roommates_create"
-        android:title="Create"
+        android:title="@string/create"
         android:checked="true"
         android:icon="@drawable/ic_baseline_group_24"
         />
 
     <item
         android:id="@+id/menu_no_roommates_join"
-        android:title="Join"
+        android:title="@string/join"
         android:checked="true"
         android:icon="@drawable/ic_baseline_person_add_24"
         />
 
     <item
-        android:id="@+id/menu_no_roommates_leave"
-        android:title="Log Out"
+        android:id="@+id/menu_no_roommates_logOut"
+        android:title="@string/log_out"
         android:checked="true"
         android:icon="@drawable/ic_baseline_exit_to_app_24"
         />

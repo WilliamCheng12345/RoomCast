@@ -9,16 +9,12 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -67,13 +63,11 @@ public class NoRoommatesActivity extends AppCompatActivity {
         navigationMenu.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if(item.getItemId() == R.id.menu_no_roommates_leave) {
+                if(item.getItemId() == R.id.menu_no_roommates_logOut) {
                     logOut();
                 }
                 else {
                     createDialog(item.getItemId());
-                    startActivity( new Intent(NoRoommatesActivity.this, RoommatesActivity.class));
-                    finish();
                 }
                 return true;
             }
@@ -128,6 +122,9 @@ public class NoRoommatesActivity extends AppCompatActivity {
         newRoommates.addUser(currUserId);
         root.child("Groups").child(name).setValue(newRoommates);
         root.child("Users").child(currUserId).child("roommatesName").setValue(name);
+
+        startActivity( new Intent(NoRoommatesActivity.this, RoommatesActivity.class));
+        finish();
     }
 
     private void joinRoommates(String joinCode) {
@@ -146,8 +143,11 @@ public class NoRoommatesActivity extends AppCompatActivity {
 
                     roommates.addUser(currUserId);
                     root.child("Users").child(currUserId).child("roommatesName").setValue(roommatesName);
-                    root.child("Groups").child(roommatesName).child("usersUID").setValue(roommates.getUsersUID());
+                    root.child("Groups").child(roommatesName).child("usersId").setValue(roommates.getUsersId());
                 }
+
+                startActivity( new Intent(NoRoommatesActivity.this, RoommatesActivity.class));
+                finish();
             }
 
             @Override
@@ -160,7 +160,7 @@ public class NoRoommatesActivity extends AppCompatActivity {
     private void logOut() {
         AlarmRemover alarmRemover = new AlarmRemover(this);
 
-        root.child(currUserId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        root.child("Users").child(currUserId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 User user = task.getResult().getValue(User.class);
@@ -169,11 +169,11 @@ public class NoRoommatesActivity extends AppCompatActivity {
                     alarmRemover.remove(upcomingNotification);
                 }
 
-                Intent newIntent = new Intent(NoRoommatesActivity.this, MainActivity.class);
+                Intent logOutIntent = new Intent(NoRoommatesActivity.this, MainActivity.class);
 
                 FirebaseAuth.getInstance().signOut();
-                newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(newIntent);
+                logOutIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(logOutIntent);
             }
         });
     }

@@ -16,11 +16,12 @@ public class AlarmBuilder {
         alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     }
 
-    public void build(long triggerTime, UpcomingNotification upcomingNotification) {
+    public void build(UpcomingNotification upcomingNotification) {
         Intent currIntent = new Intent(context.getApplicationContext(), NotificationBroadcastReceiver.class);
         Message message = upcomingNotification.getMessage();
         long interval = message.getInterval();
         int id = upcomingNotification.getId();
+        long triggerTime = upcomingNotification.getTriggerTime();
 
         currIntent.putExtra("Title", message.getTitle());
         currIntent.putExtra("Body", message.getBody());

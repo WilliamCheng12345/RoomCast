@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.williamcheng.roomcast.R;
 import com.williamcheng.roomcast.classes.AlarmBuilder;
+import com.williamcheng.roomcast.classes.Roommates;
 import com.williamcheng.roomcast.classes.ToastBuilder;
 import com.williamcheng.roomcast.classes.UpcomingNotification;
 import com.williamcheng.roomcast.classes.User;
@@ -39,17 +41,62 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if(task.isSuccessful()){
+                    deviceToken = task.getResult();
+
+                    setOnClickListeners();
+                }
+                else {
+                    toastBuilder.createToast("Device registration token retrieval failed");
+                }
+            }
+        });
+    }
+
+    private void moveToNextActivity() {
+        String currUserId = firebaseAuth.getCurrentUser().getUid();
+        DatabaseReference rootUsers = FirebaseDatabase.getInstance().getReference("Users");
+
+        rootUsers.child(currUserId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                User user = task.getResult().getValue(User.class);
+
+                /* If user signs into his account on a different device, we need to get the new
+                 * registration token for that device in order for user to receive notifications */
+                rootUsers.child(currUserId).child("deviceToken").setValue(deviceToken);
+
+                if(user.getRoommatesName().equals("EMPTY")) {
+                    startActivity(new Intent(MainActivity.this, NoRoommatesActivity.class));
+                }
+                else {
+                    for(UpcomingNotification upcomingNotification : user.getUpcomingNotifications()) {
+                        restartAlarm(upcomingNotification);
+                    }
+                    startActivity(new Intent(MainActivity.this, RoommatesActivity.class));
+                }
+
+                finish();
+            }
+        });
+    }
+
+    /* Alarms on the phone will be removed when user logs out or the phone powers off.
+     * Therefore it is needed to restart these alarms when the user logs back on.*/
+    private void restartAlarm(UpcomingNotification upcomingNotification) {
+        final AlarmBuilder alarmBuilder = new AlarmBuilder(this);
+
+        alarmBuilder.build(upcomingNotification);
+    }
+
+    private void setOnClickListeners() {
         Button loginButton = findViewById(R.id.main_loginButton);
         TextView signUpText = findViewById(R.id.main_signUpText);
         EditText emailInput = findViewById(R.id.main_emailInput);
         EditText passwordInput = findViewById(R.id.main_passwordInput);
-
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-            @Override
-            public void onComplete(@NonNull Task<String> task) {
-                deviceToken = task.getResult();
-            }
-        });
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +112,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private void login(String email, String password) {
         if(email.equals("") || password.equals("")) {
@@ -84,43 +130,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    private void moveToNextActivity() {
-        String currUserId = firebaseAuth.getCurrentUser().getUid();
-        DatabaseReference rootUsers = FirebaseDatabase.getInstance().getReference("Users");
-
-        rootUsers.child(currUserId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                User user = task.getResult().getValue(User.class);
-
-                /* If user signs into his account on a different device, we need to get the new
-                 * registration token for that device in order for user to receive notifications */
-                rootUsers.child(currUserId).child("token").setValue(deviceToken);
-
-                if(user.getRoommatesName().equals("EMPTY")) {
-                    startActivity(new Intent(MainActivity.this, NoRoommatesActivity.class));
-                }
-                else {
-                    for(UpcomingNotification upcomingNotification : user.getUpcomingNotifications()) {
-                        restartAlarm(upcomingNotification);
-                    }
-
-                    startActivity(new Intent(MainActivity.this, RoommatesActivity.class));
-                }
-
-                finish();
-            }
-        });
-    }
-
-    /* Alarms on the phone will be removed when user logs out or the phone powers off.
-     * Therefore it is needed to restart these alarms when the user logs back on.*/
-    private void restartAlarm(UpcomingNotification upcomingNotification) {
-        final AlarmBuilder alarmBuilder = new AlarmBuilder(this);
-
-        alarmBuilder.build(upcomingNotification.getTriggerTime(), upcomingNotification);
     }
 
     private void displayLoginError(Task<AuthResult> task) {

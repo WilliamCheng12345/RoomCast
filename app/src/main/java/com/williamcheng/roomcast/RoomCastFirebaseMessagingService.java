@@ -52,7 +52,7 @@ public class RoomCastFirebaseMessagingService  extends FirebaseMessagingService 
                     rootUsers.child(currUserID).child("upcomingNotifications").setValue(user.getUpcomingNotifications());
                 }
 
-                alarmBuilder.build(currTime, upcomingNotification);
+                alarmBuilder.build(upcomingNotification);
             }
         });
     }

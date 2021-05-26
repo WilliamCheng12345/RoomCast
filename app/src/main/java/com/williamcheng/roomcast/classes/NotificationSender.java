@@ -65,13 +65,13 @@ public class NotificationSender {
                     public void onComplete(@NonNull Task<DataSnapshot> task) {
                         Roommates roommates = task.getResult().getValue(Roommates.class);
 
-                        for(String receiverUID : roommates.getUsersUID()) {
+                        for(String receiverUID : roommates.getUsersId()) {
                             root.child("Users").child(receiverUID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DataSnapshot> task) {
                                     User receiver = task.getResult().getValue(User.class);
 
-                                    sendNotification(title, body, interval, receiver.getToken());
+                                    sendNotification(title, body, interval, receiver.getDeviceToken());
                                 }
                             });
                         }

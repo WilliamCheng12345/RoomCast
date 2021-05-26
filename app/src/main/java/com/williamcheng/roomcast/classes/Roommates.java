@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Roommates {
     private String name, joinCode;
-    private List<String> usersUID = new ArrayList<>();
+    private List<String> usersId = new ArrayList<>();
 
     public Roommates(String name) {
         this.name = name;
@@ -37,8 +37,8 @@ public class Roommates {
         joinCode = newCode.toString();
     }
 
-    public void addUser(String uid) {
-        usersUID.add(uid);
+    public void addUser(String userId) {
+        usersId.add(userId);
     }
 
     public String getName() {
@@ -49,8 +49,8 @@ public class Roommates {
         return joinCode;
     }
 
-    public List<String> getUsersUID() {
-        return usersUID;
+    public List<String> getUsersId() {
+        return usersId;
     }
 
     public void setName(String name) {
@@ -61,7 +61,7 @@ public class Roommates {
         this.joinCode = joinCode;
     }
 
-    public void setUsersUID(List<String> usersUID) {
-        this.usersUID = usersUID;
+    public void setUsersId(List<String> usersId) {
+        this.usersId = usersId;
     }
 }

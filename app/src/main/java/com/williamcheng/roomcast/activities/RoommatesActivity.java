@@ -37,7 +37,8 @@ public class RoommatesActivity extends AppCompatActivity implements AdapterView.
     private User user;
     private Roommates roommates;
     private String currUserId;
-    private DatabaseReference root;
+    private DatabaseReference rootUsers;
+    private DatabaseReference rootGroups;
     private ActionBarDrawerToggle toggle;
     private Spinner intervalSpinner;
 
@@ -46,43 +47,37 @@ public class RoommatesActivity extends AppCompatActivity implements AdapterView.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_roommates);
 
-        EditText messageTitle = findViewById(R.id.roommates_messageTitle);
-        EditText messageBody = findViewById(R.id.roommates_messageBody);
-        Button sendButton = findViewById(R.id.roommates_sendButton);
-
-        setActionBarDrawerToggle();
-        setIntervalSpinner();
-        setNavigationMenuItemListener();
-
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendNotification(messageTitle.getText().toString(), messageBody.getText().toString(), intervalSpinner.getSelectedItem().toString());
-            }
-        });
-
-        root = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference root = FirebaseDatabase.getInstance().getReference();
         currUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        rootUsers = root.child("Users");
+        rootGroups = root.child("Groups");
 
+        setIntervalSpinner();
+        setActionBarDrawerToggle();
+        setNavigationMenuItemListener();
+        setSendButton();
         setJoinCode();
     }
+
+    private void setIntervalSpinner() {
+        intervalSpinner = findViewById(R.id.roommates_intervalSpinner);
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.interval, android.R.layout.simple_spinner_item);
+
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        intervalSpinner.setAdapter(spinnerAdapter);
+        intervalSpinner.setOnItemSelectedListener(this);
+    }
+
 
     private void setActionBarDrawerToggle() {
         DrawerLayout drawerLayout = findViewById(R.id.roommates);
         toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
+
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-
-    private void setIntervalSpinner() {
-        intervalSpinner = findViewById(R.id.roommates_intervalSpinner);
-        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.interval, android.R.layout.simple_spinner_item);
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        intervalSpinner.setAdapter(spinnerAdapter);
-        intervalSpinner.setOnItemSelectedListener(this);
-    }
 
     private void setNavigationMenuItemListener() {
         NavigationView navigationMenu = findViewById(R.id.roommates_navigationView);
@@ -96,7 +91,7 @@ public class RoommatesActivity extends AppCompatActivity implements AdapterView.
                     leave();
                 } else if (selectedId == R.id.menu_roommates_logOut) {
                     logOut();
-                } else if (selectedId == R.id.menu_roommates_savedNotifications) {
+                } else if (selectedId == R.id.menu_roommates_upcomingNotifications) {
                     startActivity(new Intent(RoommatesActivity.this, UpcomingNotificationActivity.class));
                 }
 
@@ -105,50 +100,27 @@ public class RoommatesActivity extends AppCompatActivity implements AdapterView.
         });
     }
 
-    private void leave() {
-        roommates.getUsersUID().remove(currUserId);
-        root.child("Users").child(currUserId).child("roommatesName").setValue("EMPTY");
-        root.child("Users").child(currUserId).child("savedNotifications").setValue(new ArrayList<>());
-        root.child("Groups").child(roommates.getName()).child("usersUID").setValue(roommates.getUsersUID());
+    private void setSendButton() {
+        EditText messageTitle = findViewById(R.id.roommates_messageTitle);
+        EditText messageBody = findViewById(R.id.roommates_messageBody);
+        Button sendButton = findViewById(R.id.roommates_sendButton);
 
-        AlarmRemover alarmRemover = new AlarmRemover(this);
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendNotification(messageTitle.getText().toString(), messageBody.getText().toString(), intervalSpinner.getSelectedItem().toString());
+            }
+        });
 
-        for(UpcomingNotification upcomingNotification : user.getUpcomingNotifications()) {
-            alarmRemover.remove(upcomingNotification);
-        }
-
-
-        startActivity(new Intent(RoommatesActivity.this, NoRoommatesActivity.class));
-        finish();
     }
-
-    private void logOut() {
-        AlarmRemover alarmRemover = new AlarmRemover(this);
-
-        for(UpcomingNotification upcomingNotification : user.getUpcomingNotifications()) {
-            alarmRemover.remove(upcomingNotification);
-        }
-
-        Intent newIntent = new Intent(this, MainActivity.class);
-
-        FirebaseAuth.getInstance().signOut();
-        newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(newIntent);
-    }
-
-    private void sendNotification(String title, String body, String interval) {
-        NotificationSender notificationSender = new NotificationSender(this);
-        notificationSender.sendToRoommates(title, body, interval);
-    }
-
 
     private void setJoinCode() {
-        root.child("Users").child(currUserId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        rootUsers.child(currUserId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> userTask) {
                 user = userTask.getResult().getValue(User.class);
 
-                root.child("Groups").child(user.getRoommatesName()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                rootGroups.child(user.getRoommatesName()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DataSnapshot> groupTask) {
                         roommates = groupTask.getResult().getValue(Roommates.class);
@@ -161,6 +133,43 @@ public class RoommatesActivity extends AppCompatActivity implements AdapterView.
                 });
             }
         });
+    }
+    private void leave() {
+        roommates.getUsersId().remove(currUserId);
+        rootUsers.child(currUserId).child("roommatesName").setValue("EMPTY");
+        rootUsers.child(currUserId).child("upcomingNotifications").setValue(new ArrayList<>());
+        rootGroups.child(roommates.getName()).child("usersId").setValue(roommates.getUsersId());
+
+        stopUpcomingNotifications();
+
+        Intent newIntent = new Intent(this, NoRoommatesActivity.class);
+
+        newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(newIntent);
+    }
+
+    private void logOut() {
+        stopUpcomingNotifications();
+
+        Intent newIntent = new Intent(this, MainActivity.class);
+
+        FirebaseAuth.getInstance().signOut();
+        newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(newIntent);
+    }
+
+    private void sendNotification(String title, String body, String interval) {
+        NotificationSender notificationSender = new NotificationSender(this);
+        notificationSender.sendToRoommates(title, body, interval);
+    }
+
+
+    private void stopUpcomingNotifications() {
+        AlarmRemover alarmRemover = new AlarmRemover(this);
+
+        for(UpcomingNotification upcomingNotification : user.getUpcomingNotifications()) {
+            alarmRemover.remove(upcomingNotification);
+        }
     }
 
     @Override

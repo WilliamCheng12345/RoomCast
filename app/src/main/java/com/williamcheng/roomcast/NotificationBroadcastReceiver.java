@@ -44,10 +44,9 @@ public class NotificationBroadcastReceiver  extends BroadcastReceiver {
             long newTriggerTime = findNextMonthlyAlarmTriggerTime();
 
             AlarmBuilder alarmBuilder = new AlarmBuilder(context);
-            alarmBuilder.build(newTriggerTime, updateUpcomingNotification(newTriggerTime));
+            alarmBuilder.build(updateUpcomingNotification(newTriggerTime));
         }
 
-        System.out.println("Broadcast received");
     }
 
     private void displayNotification(Context context) {
@@ -75,12 +74,12 @@ public class NotificationBroadcastReceiver  extends BroadcastReceiver {
 
                 for(UpcomingNotification notification : user.getUpcomingNotifications()) {
                     if(notification.getId() == upcomingNotification.getId()) {
-                        user.getUpcomingNotifications().remove(notification);
+                        notification.setTriggerTime(newTriggerTime);
+                        rootUsers.child(currUserID).child("upcomingNotifications").setValue(user.getUpcomingNotifications());
                     }
                 }
 
-                user.getUpcomingNotifications().add(upcomingNotification);
-                rootUsers.child(currUserID).child("upcomingNotifications").setValue(user.getUpcomingNotifications());
+
             }
         });
 

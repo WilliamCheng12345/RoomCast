@@ -9,4 +9,24 @@ public class Interval {
    public static final long WEEKLY = AlarmManager.INTERVAL_DAY*7;
    public static final long MONTHLY_START = 1;
    public static final long MONTHLY_END = 2;
+
+   public static String toString(long interval) {
+      if(interval == HOURLY) {
+         return "Hourly";
+      }
+      else if(interval == DAILY) {
+         return "Daily";
+      }
+      else if(interval == WEEKLY) {
+         return "Weekly";
+      }
+      else if(interval == MONTHLY_START) {
+         return "Every start of the month";
+      }
+      else if(interval == MONTHLY_END) {
+         return "Every end of the month";
+      }
+
+      return "Once";
+   }
 }
