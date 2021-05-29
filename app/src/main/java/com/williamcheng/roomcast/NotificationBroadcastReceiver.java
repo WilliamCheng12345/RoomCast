@@ -38,7 +38,7 @@ public class NotificationBroadcastReceiver  extends BroadcastReceiver {
         displayNotification(context);
 
         if (interval == Interval.HOURLY || interval == Interval.DAILY || interval == Interval.WEEKLY) {
-            updateUpcomingNotification(time + interval);
+            updateUpcomingNotification(findTriggerTime());
         }
         else if(interval == Interval.MONTHLY_START || interval == Interval.MONTHLY_END) {
             long newTriggerTime = findNextMonthlyAlarmTriggerTime();
@@ -84,6 +84,13 @@ public class NotificationBroadcastReceiver  extends BroadcastReceiver {
         });
 
         return  upcomingNotification;
+    }
+
+    private long findTriggerTime() {
+        long currTime = System.currentTimeMillis();
+        long numOfInterval = (currTime - time)/interval + 1;
+
+        return time + numOfInterval*interval;
     }
 
     private long findNextMonthlyAlarmTriggerTime() {

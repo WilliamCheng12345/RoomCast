@@ -4,10 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="16dp"
-    android:background="@drawable/custom_background_upcoming_notification"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="8dp"
+
     android:orientation="vertical">
 
 
@@ -20,29 +17,48 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:buttonTint="@color/dark_turquoise"/>
+            android:buttonTint="@color/egyptian_blue"/>
    </RelativeLayout>
-
-    <TextView
-        android:id="@+id/list_upcoming_notification_triggerTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="3dp"
-        android:text="@string/empty"
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/list_upcoming_notification_interval"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/empty"
-        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/list_upcoming_notification_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/empty"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/egyptian_blue"/>
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/list_upcoming_notification_triggerTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:text="@string/empty"
+            android:textColor="@color/neon_blue"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/list_upcoming_notification_interval"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/empty"
+            android:textSize="15sp"
+            android:layout_alignParentEnd="true"/>
+
+    </RelativeLayout>
+
+
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray"/>
 </LinearLayout>
 

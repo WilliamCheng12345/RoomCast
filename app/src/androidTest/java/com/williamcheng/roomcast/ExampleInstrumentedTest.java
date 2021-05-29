@@ -1,18 +1,9 @@
 package com.williamcheng.roomcast;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-
-import com.williamcheng.roomcast.activities.MainActivity;
-import com.williamcheng.roomcast.classes.AlarmBuilder;
-import com.williamcheng.roomcast.classes.Interval;
-import com.williamcheng.roomcast.classes.Message;
-import com.williamcheng.roomcast.classes.SavedNotification;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

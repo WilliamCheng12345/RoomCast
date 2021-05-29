@@ -8,18 +8,20 @@ import android.content.Intent;
 import com.williamcheng.roomcast.NotificationBroadcastReceiver;
 
 public class AlarmRemover {
-    private final Context context;
+    private final Context appContext;
     private final AlarmManager alarmManager;
 
     public AlarmRemover(Context context) {
-        this.context = context;
-        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        this.appContext = context.getApplicationContext();
+        alarmManager = (AlarmManager) appContext.getSystemService(Context.ALARM_SERVICE);
     }
 
     public void remove(UpcomingNotification upcomingNotification) {
-        Intent currIntent = new Intent(context.getApplicationContext(), NotificationBroadcastReceiver.class);
-        PendingIntent currPendingIntent = PendingIntent.getBroadcast(context.getApplicationContext(), upcomingNotification.getId(), currIntent, 0);
-        alarmManager.cancel(currPendingIntent);
+        Intent intent = new Intent(appContext, NotificationBroadcastReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(appContext, upcomingNotification.getId(), intent, 0);
+
+        alarmManager.cancel(pendingIntent);
+        pendingIntent.cancel();
     }
 
 }

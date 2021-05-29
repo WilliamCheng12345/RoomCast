@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/menu_roommates_leave"
-        android:title="@string/leave"
-        android:checked="true"
-        android:icon="@drawable/ic_baseline_person_remove_24"
-        />
-
-    <item
         android:id="@+id/menu_roommates_upcomingNotifications"
         android:title="@string/upcoming_notifications"
         android:checked="true"
         android:icon="@drawable/ic_baseline_notifications_24"
+        />
+
+    <item
+        android:id="@+id/menu_roommates_leave"
+        android:title="@string/leave"
+        android:checked="true"
+        android:icon="@drawable/ic_baseline_person_remove_24"
         />
 
     <item
