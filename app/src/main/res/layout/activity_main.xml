@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background"
     tools:context=".activities.MainActivity"
-    android:paddingTop="70dp"
+    android:paddingTop="60dp"
     android:orientation="vertical"
     android:paddingHorizontal="25dp"
     >
@@ -18,7 +18,7 @@
         android:fontFamily="@font/averia_gruesa_libre"
         android:text="@string/RoomCast"
         android:textColor="?attr/colorPrimary"
-        android:textSize="36sp"
+        android:textSize="45sp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="50dp"/>
 
@@ -45,10 +45,9 @@
             android:background="@drawable/custom_input"
             android:drawableStart="@drawable/ic_baseline_lock_24"
             android:drawablePadding="12dp"
-            android:ems="10"
             android:hint="@string/password"
             android:inputType="textPassword"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="12dp"
             android:layout_centerHorizontal="true"/>
 
         <TextView

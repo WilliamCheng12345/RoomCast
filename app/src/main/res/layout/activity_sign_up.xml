@@ -14,6 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="36dp"
         android:background="@drawable/custom_input"
+        android:drawableStart="@drawable/ic_baseline_email_24"
+        android:drawablePadding="12dp"
         android:hint="@string/email"
         android:inputType="textEmailAddress"
         android:layout_marginTop="100dp"/>
@@ -23,6 +25,8 @@
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="36dp"
+        android:drawableStart="@drawable/ic_baseline_lock_24"
+        android:drawablePadding="12dp"
         android:background="@drawable/custom_input"
         android:hint="@string/password"
         android:inputType="textPassword"
@@ -35,6 +39,8 @@
         android:layout_marginTop="20dp"
         android:layout_height="36dp"
         android:hint="@string/confirm_password"
+        android:drawableStart="@drawable/ic_baseline_lock_24"
+        android:drawablePadding="12dp"
         android:inputType="textPassword"
         android:background="@drawable/custom_input" />
 

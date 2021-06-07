@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/roommates"
-    tools:context=".activities.RoommatesActivity">
+    tools:context=".activities.RoommatesActivity"
+    android:background="@color/gainsboro">
 
     <LinearLayout
         android:layout_width="match_parent"

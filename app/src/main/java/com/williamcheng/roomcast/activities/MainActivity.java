@@ -63,33 +63,35 @@ public class MainActivity extends AppCompatActivity {
         rootUsers.child(currUserId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
-                User user = task.getResult().getValue(User.class);
+                if(task.isSuccessful()) {
+                    User user = task.getResult().getValue(User.class);
 
-                /* If user signs into his account on a different device, we need to get the new
-                 * registration token for that device in order for user to receive notifications */
-                rootUsers.child(currUserId).child("deviceToken").setValue(deviceToken);
+                    /* If user signs into his account on a different device, we need to get the new
+                     * registration token for that device in order for user to receive notifications */
+                    rootUsers.child(currUserId).child("deviceToken").setValue(deviceToken);
 
-                if(user.getRoommatesName().equals("EMPTY")) {
-                    startActivity(new Intent(MainActivity.this, NoRoommatesActivity.class));
-                }
-                else {
-                    for(UpcomingNotification upcomingNotification : user.getUpcomingNotifications()) {
-                        restartAlarm(upcomingNotification);
+                    if(user.getRoommatesName().equals("EMPTY")) {
+                        startActivity(new Intent(MainActivity.this, NoRoommatesActivity.class));
                     }
-                    startActivity(new Intent(MainActivity.this, RoommatesActivity.class));
-                }
+                    else {
+                        restartAlarms(user);
+                        startActivity(new Intent(MainActivity.this, RoommatesActivity.class));
+                    }
 
-                finish();
+                    finish();
+                }
             }
         });
     }
 
     /* Alarms on the phone will be removed when user logs out or the phone powers off.
      * Therefore it is needed to restart these alarms when the user logs back on.*/
-    private void restartAlarm(UpcomingNotification upcomingNotification) {
+    private void restartAlarms(User user) {
         final AlarmBuilder alarmBuilder = new AlarmBuilder(this);
 
-        alarmBuilder.build(upcomingNotification);
+        for(UpcomingNotification upcomingNotification : user.getUpcomingNotifications()) {
+            alarmBuilder.build(upcomingNotification);
+        }
     }
 
     private void setOnClickListeners() {

@@ -41,10 +41,9 @@ public class NotificationBroadcastReceiver  extends BroadcastReceiver {
             updateUpcomingNotification(findTriggerTime());
         }
         else if(interval == Interval.MONTHLY_START || interval == Interval.MONTHLY_END) {
-            long newTriggerTime = findNextMonthlyAlarmTriggerTime();
-
             AlarmBuilder alarmBuilder = new AlarmBuilder(context);
-            alarmBuilder.build(updateUpcomingNotification(newTriggerTime));
+
+            alarmBuilder.build(updateUpcomingNotification(findNextMonthlyAlarmTriggerTime()));
         }
 
     }
@@ -96,6 +95,15 @@ public class NotificationBroadcastReceiver  extends BroadcastReceiver {
     private long findNextMonthlyAlarmTriggerTime() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(time);
+
+        int hour = calendar.get(Calendar.HOUR);
+        int min = calendar.get(Calendar.MINUTE);
+        int sec = calendar.get(Calendar.MILLISECOND);
+
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR, hour);
+        calendar.set(Calendar.MINUTE, min);
+        calendar.set(Calendar.MILLISECOND, sec);
 
         if (interval == Interval.MONTHLY_START) {
             calendar.add(Calendar.MONTH, 1);

@@ -31,8 +31,8 @@ import com.williamcheng.roomcast.classes.UpcomingNotification;
 import com.williamcheng.roomcast.classes.User;
 
 public class NoRoommatesActivity extends AppCompatActivity {
-    private ActionBarDrawerToggle toggle;
     private final ToastBuilder toastBuilder = new ToastBuilder(this);
+    private ActionBarDrawerToggle toggle;
     private String currUserId;
     private DatabaseReference root;
 
@@ -117,14 +117,33 @@ public class NoRoommatesActivity extends AppCompatActivity {
             toastBuilder.createToast("Roommates name cannot be empty");
         }
 
-        Roommates newRoommates = new Roommates(name);
+        Query query = root.child("Groups").orderByChild("name").equalTo(name);
 
-        newRoommates.addUser(currUserId);
-        root.child("Groups").child(name).setValue(newRoommates);
-        root.child("Users").child(currUserId).child("roommatesName").setValue(name);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()) {
+                    toastBuilder.createToast("Roommates name exist");
+                    return;
+                }
 
-        startActivity( new Intent(NoRoommatesActivity.this, RoommatesActivity.class));
-        finish();
+                Roommates newRoommates = new Roommates(name);
+
+                newRoommates.addUser(currUserId);
+                root.child("Groups").child(name).setValue(newRoommates);
+                root.child("Users").child(currUserId).child("roommatesName").setValue(name);
+
+                startActivity( new Intent(NoRoommatesActivity.this, RoommatesActivity.class));
+                finish();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
     }
 
     private void joinRoommates(String joinCode) {
@@ -137,6 +156,11 @@ public class NoRoommatesActivity extends AppCompatActivity {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(!snapshot.exists()) {
+                    toastBuilder.createToast("Cannot find roommates with this code");
+                    return;
+                }
+
                 for(DataSnapshot data : snapshot.getChildren()) {
                     Roommates roommates = data.getValue(Roommates.class);
                     String roommatesName = roommates.getName();
@@ -144,10 +168,10 @@ public class NoRoommatesActivity extends AppCompatActivity {
                     roommates.addUser(currUserId);
                     root.child("Users").child(currUserId).child("roommatesName").setValue(roommatesName);
                     root.child("Groups").child(roommatesName).child("usersId").setValue(roommates.getUsersId());
-                }
 
-                startActivity( new Intent(NoRoommatesActivity.this, RoommatesActivity.class));
-                finish();
+                    startActivity( new Intent(NoRoommatesActivity.this, RoommatesActivity.class));
+                    finish();
+                }
             }
 
             @Override
