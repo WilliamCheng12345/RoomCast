@@ -1,5 +1,7 @@
 package com.williamcheng.roomcast.classes;
 
+import com.williamcheng.roomcast.classes.Message;
+
 public class UpcomingNotification {
     private Message message = new Message();
     private int id;

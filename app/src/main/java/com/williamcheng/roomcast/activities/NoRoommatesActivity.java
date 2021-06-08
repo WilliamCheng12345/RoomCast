@@ -24,7 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.williamcheng.roomcast.R;
-import com.williamcheng.roomcast.classes.AlarmRemover;
+import com.williamcheng.roomcast.alarms.AlarmRemover;
 import com.williamcheng.roomcast.classes.Roommates;
 import com.williamcheng.roomcast.classes.ToastBuilder;
 import com.williamcheng.roomcast.classes.UpcomingNotification;
@@ -102,7 +102,7 @@ public class NoRoommatesActivity extends AppCompatActivity {
             });
         }
 
-        alertDialog.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
@@ -111,6 +111,28 @@ public class NoRoommatesActivity extends AppCompatActivity {
 
         alertDialog.show();
     }
+
+    private void logOut() {
+        AlarmRemover alarmRemover = new AlarmRemover(this);
+
+        root.child("Users").child(currUserId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> userTask) {
+                User user = userTask.getResult().getValue(User.class);
+
+                for(UpcomingNotification upcomingNotification : user.getUpcomingNotifications()) {
+                    alarmRemover.remove(upcomingNotification);
+                }
+
+                Intent logOutIntent = new Intent(NoRoommatesActivity.this, MainActivity.class);
+
+                FirebaseAuth.getInstance().signOut();
+                logOutIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(logOutIntent);
+            }
+        });
+    }
+
 
     private void createRoommates(String name) {
         if(name.equals("")) {
@@ -177,27 +199,6 @@ public class NoRoommatesActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
-    }
-
-    private void logOut() {
-        AlarmRemover alarmRemover = new AlarmRemover(this);
-
-        root.child("Users").child(currUserId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                User user = task.getResult().getValue(User.class);
-
-                for(UpcomingNotification upcomingNotification : user.getUpcomingNotifications()) {
-                    alarmRemover.remove(upcomingNotification);
-                }
-
-                Intent logOutIntent = new Intent(NoRoommatesActivity.this, MainActivity.class);
-
-                FirebaseAuth.getInstance().signOut();
-                logOutIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(logOutIntent);
             }
         });
     }

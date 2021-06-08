@@ -1,11 +1,13 @@
-package com.williamcheng.roomcast.classes;
+package com.williamcheng.roomcast.alarms;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
-import com.williamcheng.roomcast.NotificationBroadcastReceiver;
+import com.williamcheng.roomcast.classes.Interval;
+import com.williamcheng.roomcast.classes.Message;
+import com.williamcheng.roomcast.classes.UpcomingNotification;
 
 public class AlarmBuilder {
     private final Context appContext;

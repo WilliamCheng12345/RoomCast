@@ -1,17 +1,13 @@
 package com.williamcheng.roomcast.activities;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -25,18 +21,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.williamcheng.roomcast.R;
-import com.williamcheng.roomcast.classes.AlarmRemover;
+import com.williamcheng.roomcast.alarms.AlarmRemover;
 import com.williamcheng.roomcast.classes.Roommates;
-import com.williamcheng.roomcast.classes.ToastBuilder;
 import com.williamcheng.roomcast.classes.UpcomingNotification;
 import com.williamcheng.roomcast.classes.UpcomingNotificationAdaptor;
 import com.williamcheng.roomcast.classes.User;
-import androidx.appcompat.widget.Toolbar;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 public class UpcomingNotificationActivity extends AppCompatActivity {

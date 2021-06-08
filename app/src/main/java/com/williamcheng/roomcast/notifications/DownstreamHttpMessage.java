@@ -1,5 +1,7 @@
-package com.williamcheng.roomcast.classes;
+package com.williamcheng.roomcast.notifications;
 
+
+import com.williamcheng.roomcast.classes.Message;
 
 public class DownstreamHttpMessage {
     private final String to;

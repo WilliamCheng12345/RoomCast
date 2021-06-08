@@ -7,11 +7,12 @@ import android.content.Intent;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.williamcheng.roomcast.classes.AlarmBuilder;
-import com.williamcheng.roomcast.classes.AlarmRemover;
+import com.williamcheng.roomcast.alarms.AlarmBuilder;
+import com.williamcheng.roomcast.alarms.AlarmRemover;
 import com.williamcheng.roomcast.classes.Interval;
 import com.williamcheng.roomcast.classes.Message;
 import com.williamcheng.roomcast.classes.UpcomingNotification;
+import com.williamcheng.roomcast.alarms.NotificationBroadcastReceiver;
 
 import org.junit.Assert;
 import org.junit.Test;

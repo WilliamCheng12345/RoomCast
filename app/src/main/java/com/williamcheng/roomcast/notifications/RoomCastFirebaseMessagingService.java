@@ -1,4 +1,4 @@
-package com.williamcheng.roomcast;
+package com.williamcheng.roomcast.notifications;
 import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -8,7 +8,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.williamcheng.roomcast.classes.AlarmBuilder;
+import com.williamcheng.roomcast.alarms.AlarmBuilder;
 import com.williamcheng.roomcast.classes.Interval;
 import com.williamcheng.roomcast.classes.Message;
 import com.williamcheng.roomcast.classes.UpcomingNotification;
@@ -24,8 +24,6 @@ public class RoomCastFirebaseMessagingService  extends FirebaseMessagingService 
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        System.out.println("Message Received");
-
         String title = remoteMessage.getData().get("title");
         String body = remoteMessage.getData().get("body");
         long interval = Long.parseLong(remoteMessage.getData().get("interval"));
@@ -34,6 +32,11 @@ public class RoomCastFirebaseMessagingService  extends FirebaseMessagingService 
     }
 
     private void buildAlarmForNotification(String title, String body, long interval) {
+        //In case the user logs out before the notifications can be sent.
+        if(FirebaseAuth.getInstance().getCurrentUser() == null) {
+             return;
+        }
+
         final AlarmBuilder alarmBuilder = new AlarmBuilder(this);
         DatabaseReference rootUsers = FirebaseDatabase.getInstance().getReference("Users");
         String currUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();

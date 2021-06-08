@@ -1,4 +1,4 @@
-package com.williamcheng.roomcast.classes;
+package com.williamcheng.roomcast.notifications;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -14,8 +14,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.williamcheng.roomcast.Client;
-import com.williamcheng.roomcast.HttpApi;
+import com.williamcheng.roomcast.classes.Interval;
+import com.williamcheng.roomcast.classes.Message;
+import com.williamcheng.roomcast.classes.Roommates;
+import com.williamcheng.roomcast.classes.ToastBuilder;
+import com.williamcheng.roomcast.classes.User;
+import com.williamcheng.roomcast.notifications.Client;
+import com.williamcheng.roomcast.notifications.DownstreamHttpMessage;
+import com.williamcheng.roomcast.notifications.DownstreamMessageResponse;
+import com.williamcheng.roomcast.notifications.HttpApi;
 
 import retrofit2.Call;
 import retrofit2.Callback;

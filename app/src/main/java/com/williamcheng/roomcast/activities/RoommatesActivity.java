@@ -25,18 +25,20 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.williamcheng.roomcast.R;
-import com.williamcheng.roomcast.classes.AlarmRemover;
-import com.williamcheng.roomcast.classes.NotificationSender;
+import com.williamcheng.roomcast.alarms.AlarmRemover;
+import com.williamcheng.roomcast.notifications.NotificationSender;
 import com.williamcheng.roomcast.classes.Roommates;
+import com.williamcheng.roomcast.classes.ToastBuilder;
 import com.williamcheng.roomcast.classes.UpcomingNotification;
 import com.williamcheng.roomcast.classes.User;
 
 import java.util.ArrayList;
 
 public class RoommatesActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+    private final ToastBuilder toastBuilder = new ToastBuilder(this);
     private User user;
     private Roommates roommates;
-    private String currUserId;
+    private String userId;
     private DatabaseReference rootUsers;
     private DatabaseReference rootGroups;
     private ActionBarDrawerToggle toggle;
@@ -48,7 +50,7 @@ public class RoommatesActivity extends AppCompatActivity implements AdapterView.
         setContentView(R.layout.activity_roommates);
 
         DatabaseReference root = FirebaseDatabase.getInstance().getReference();
-        currUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         rootUsers = root.child("Users");
         rootGroups = root.child("Groups");
 
@@ -115,7 +117,7 @@ public class RoommatesActivity extends AppCompatActivity implements AdapterView.
     }
 
     private void setJoinCode() {
-        rootUsers.child(currUserId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        rootUsers.child(userId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> userTask) {
                 user = userTask.getResult().getValue(User.class);
@@ -135,10 +137,17 @@ public class RoommatesActivity extends AppCompatActivity implements AdapterView.
         });
     }
     private void leave() {
-        roommates.getUsersId().remove(currUserId);
-        rootUsers.child(currUserId).child("roommatesName").setValue("EMPTY");
-        rootUsers.child(currUserId).child("upcomingNotifications").setValue(new ArrayList<>());
-        rootGroups.child(roommates.getName()).child("usersId").setValue(roommates.getUsersId());
+        roommates.getUsersId().remove(userId);
+        rootUsers.child(userId).child("roommatesName").setValue("EMPTY");
+        rootUsers.child(userId).child("upcomingNotifications").setValue(new ArrayList<>());
+
+        if(roommates.getUsersId().size() == 0) {
+            rootGroups.child(roommates.getName()).removeValue(); 
+        }
+        else {
+            rootGroups.child(roommates.getName()).child("usersId").setValue(roommates.getUsersId());
+        }
+
 
         stopUpcomingNotifications();
 
@@ -160,7 +169,10 @@ public class RoommatesActivity extends AppCompatActivity implements AdapterView.
 
     private void sendNotification(String title, String body, String interval) {
         NotificationSender notificationSender = new NotificationSender(this);
+
         notificationSender.sendToRoommates(title, body, interval);
+        toastBuilder.createToast("Notification sent");
+
     }
 
 

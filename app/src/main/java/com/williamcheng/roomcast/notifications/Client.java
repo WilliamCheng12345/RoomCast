@@ -1,4 +1,4 @@
-package com.williamcheng.roomcast;
+package com.williamcheng.roomcast.notifications;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

@@ -1,7 +1,4 @@
-package com.williamcheng.roomcast;
-
-import com.williamcheng.roomcast.classes.DownstreamHttpMessage;
-import com.williamcheng.roomcast.classes.DownstreamMessageResponse;
+package com.williamcheng.roomcast.notifications;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
